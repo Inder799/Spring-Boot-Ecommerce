@@ -14,7 +14,10 @@ import com.ecommerce.sb_ecom.util.AuthUtil;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -176,6 +179,24 @@ public class CartServiceImpl implements CartService{
         return cartDTO;
     }
 
+    @Override
+    public String deleteProductFromCart(Long cartId, Long productId) {
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new ResourceNotFoundException("Cart", "cartId", cartId));
+
+        CartItem cartItem = cartItemRepository.findCartItemByProductIdAndCartId(cartId, productId);
+
+        if(cartItem == null) {
+            throw new ResourceNotFoundException("Product", "productId", productId);
+        }
+
+        cart.setTotalPrice(cart.getTotalPrice() - (cartItem.getProductPrice() * cartItem.getQuantity()));
+
+        cartItemRepository.deleteCartItemByProductIdAndCartId(productId, cartId);
+
+        return "Product " + cartItem.getProduct().getProductName() + " removed from the Cart!!!";
+    }
+
     private Cart createCart() {
         Cart userCart = cartRepository.findCartByEmail(authUtil.loggedInEmail());
         if(userCart != null) {
@@ -188,5 +209,7 @@ public class CartServiceImpl implements CartService{
         Cart newCart = cartRepository.save(cart);
         return newCart;
     }
+
+
 
 }
