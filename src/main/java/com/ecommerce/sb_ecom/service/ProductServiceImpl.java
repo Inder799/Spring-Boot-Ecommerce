@@ -2,10 +2,13 @@ package com.ecommerce.sb_ecom.service;
 
 import com.ecommerce.sb_ecom.exceptions.APIException;
 import com.ecommerce.sb_ecom.exceptions.ResourceNotFoundException;
+import com.ecommerce.sb_ecom.model.Cart;
 import com.ecommerce.sb_ecom.model.Category;
 import com.ecommerce.sb_ecom.model.Product;
+import com.ecommerce.sb_ecom.payload.CartDTO;
 import com.ecommerce.sb_ecom.payload.ProductDTO;
 import com.ecommerce.sb_ecom.payload.ProductResponse;
+import com.ecommerce.sb_ecom.repositories.CartRepository;
 import com.ecommerce.sb_ecom.repositories.CategoryRepository;
 import com.ecommerce.sb_ecom.repositories.ProductRepository;
 import org.modelmapper.ModelMapper;
@@ -28,15 +31,19 @@ public class ProductServiceImpl implements ProductService{
     private final CategoryRepository categoryRepository;
     private final ModelMapper modelMapper;
     private final FileService fileService;
+    private final CartRepository cartRepository;
+    private final CartService cartService;
 
     @Value("${project.image}")
     private String folderPath;
 
-    public ProductServiceImpl(ProductRepository productRepository, CategoryRepository categoryRepository, ModelMapper modelMapper, FileService fileService) {
+    public ProductServiceImpl(ProductRepository productRepository, CategoryRepository categoryRepository, ModelMapper modelMapper, FileService fileService, CartRepository cartRepository, CartService cartService) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
         this.modelMapper = modelMapper;
         this.fileService = fileService;
+        this.cartRepository = cartRepository;
+        this.cartService = cartService;
     }
 
     @Override
@@ -144,12 +151,30 @@ public class ProductServiceImpl implements ProductService{
         // Save to database
         Product savedProduct = productRepository.save(productFromDb);
 
+        List<Cart> carts = cartRepository.findCartByProductId(productId);
+
+        List<CartDTO> cartDTOs = carts.stream().map(cart -> {
+            CartDTO cartDTO = modelMapper.map(cart, CartDTO.class);
+            List<ProductDTO> products = cart.getCartItems().stream()
+                    .map(p -> modelMapper.map(p.getProduct(), ProductDTO.class))
+                    .toList();
+            cartDTO.setProducts(products);
+            return cartDTO;
+        }).toList();
+
+        cartDTOs.forEach(cart -> cartService.updateProductInCarts(cart.getCartId(), productId));
+
         return modelMapper.map(savedProduct, ProductDTO.class);
     }
 
     @Override
     public ProductDTO deleteProduct(Long productId) {
         Product productFromDb = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product", "productId", productId));
+
+        // DELETE product from cart
+        List<Cart> carts = cartRepository.findCartByProductId(productId);
+        carts.forEach(cart -> cartService.deleteProductFromCart(cart.getCartId(), productId));
+
         productRepository.delete(productFromDb);
         return modelMapper.map(productFromDb, ProductDTO.class);
     }
