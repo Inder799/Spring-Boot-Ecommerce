@@ -1,4 +1,4 @@
-package com.ecommerce.sb_ecom.model;
+package com.ecommerce.sb_ecom.payload;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

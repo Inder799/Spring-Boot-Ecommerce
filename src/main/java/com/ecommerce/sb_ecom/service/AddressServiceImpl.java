@@ -2,7 +2,7 @@ package com.ecommerce.sb_ecom.service;
 
 import com.ecommerce.sb_ecom.exceptions.ResourceNotFoundException;
 import com.ecommerce.sb_ecom.model.Address;
-import com.ecommerce.sb_ecom.model.AddressDTO;
+import com.ecommerce.sb_ecom.payload.AddressDTO;
 import com.ecommerce.sb_ecom.model.User;
 import com.ecommerce.sb_ecom.repositories.AddressRepository;
 import com.ecommerce.sb_ecom.repositories.UserRepository;

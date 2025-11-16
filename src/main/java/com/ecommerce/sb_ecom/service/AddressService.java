@@ -1,6 +1,6 @@
 package com.ecommerce.sb_ecom.service;
 
-import com.ecommerce.sb_ecom.model.AddressDTO;
+import com.ecommerce.sb_ecom.payload.AddressDTO;
 import com.ecommerce.sb_ecom.model.User;
 
 import java.util.List;

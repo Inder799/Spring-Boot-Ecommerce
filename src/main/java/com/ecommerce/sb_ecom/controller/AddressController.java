@@ -1,6 +1,6 @@
 package com.ecommerce.sb_ecom.controller;
 
-import com.ecommerce.sb_ecom.model.AddressDTO;
+import com.ecommerce.sb_ecom.payload.AddressDTO;
 import com.ecommerce.sb_ecom.model.User;
 import com.ecommerce.sb_ecom.service.AddressService;
 import com.ecommerce.sb_ecom.util.AuthUtil;
