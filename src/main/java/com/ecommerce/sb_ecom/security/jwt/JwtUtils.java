@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
@@ -35,19 +36,22 @@ public class JwtUtils {
     private String jwtCookie;
 
     // Getting JWT from header
-//    public String getJwtFromHeader(HttpServletRequest request) {
-//        String bearerToken = request.getHeader("Authorization");
-//        logger.debug("Authorization Header: {}", bearerToken);
-//        if(bearerToken != null && bearerToken.startsWith("Bearer ")) {
-//            return bearerToken.substring(7); // Remove Bearer prefix
-//        }
-//        return null;
-//    }
+    public String getJwtFromHeader(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        logger.debug("Authorization Header: {}", bearerToken);
+        if(bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7); // Remove Bearer prefix
+        }
+        return null;
+    }
 
     public String getJwtFromCookies(HttpServletRequest request) {
         Cookie cookie = WebUtils.getCookie(request, jwtCookie);
-        System.out.println("COOKIE: " + cookie.getValue());
-        return cookie.getValue();
+//        System.out.println("COOKIE: " + cookie.getValue());
+        if(cookie != null) {
+            return cookie.getValue();
+        }
+        return null;
     }
 
     public ResponseCookie generateJwtCookie(UserDetailsImpl userPrincipal) {

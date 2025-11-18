@@ -6,6 +6,7 @@ import com.ecommerce.sb_ecom.payload.ProductDTO;
 import com.ecommerce.sb_ecom.repositories.CartRepository;
 import com.ecommerce.sb_ecom.service.CartService;
 import com.ecommerce.sb_ecom.util.AuthUtil;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@Tag(name = "Cart APIs", description = "APIs for managing carts")
 public class CartController {
 
     @Autowired

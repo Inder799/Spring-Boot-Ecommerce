@@ -4,6 +4,7 @@ import com.ecommerce.sb_ecom.payload.AddressDTO;
 import com.ecommerce.sb_ecom.model.User;
 import com.ecommerce.sb_ecom.service.AddressService;
 import com.ecommerce.sb_ecom.util.AuthUtil;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@Tag(name = "Address APIs", description = "APIs for managing address")
 public class AddressController {
 
     @Autowired

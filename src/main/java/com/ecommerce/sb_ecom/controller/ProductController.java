@@ -3,6 +3,7 @@ package com.ecommerce.sb_ecom.controller;
 import com.ecommerce.sb_ecom.payload.ProductDTO;
 import com.ecommerce.sb_ecom.payload.ProductResponse;
 import com.ecommerce.sb_ecom.service.ProductService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import static com.ecommerce.sb_ecom.config.AppConstants.SORT_DIR;
 
 @RestController
 @RequestMapping("/api")
+@Tag(name = "Product APIs", description = "APIs for managing products")
 public class ProductController {
 
     @Autowired

@@ -11,6 +11,7 @@ import com.ecommerce.sb_ecom.security.request.SignupRequest;
 import com.ecommerce.sb_ecom.security.response.MessageResponse;
 import com.ecommerce.sb_ecom.security.response.UserInfoResponse;
 import com.ecommerce.sb_ecom.security.services.UserDetailsImpl;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/auth")
+@Tag(name = "Authentication APIs", description = "APIs for managing authentication")
 public class AuthController {
 
     @Autowired
